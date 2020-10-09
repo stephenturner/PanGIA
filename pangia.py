@@ -1,6 +1,7 @@
-__author__    = "David Yarmosh, MRIGlobal Bioinformatics."
-__version__   = "1.1.0"
-__date__      = "2020/10/09"
+#!/home/edge/edge_dev/thirdParty/Anaconda3/bin/python3
+__author__    = "Po-E (Paul) Li, Bioscience Division, Los Alamos National Laboratory"
+__version__   = "1.0.0-RC6.1"
+__date__      = "2018/12/10"
 __copyright__ = "BSD-3"
 
 import argparse as ap
@@ -306,7 +307,7 @@ def parse_params(ver):
 
     elif args_parsed.sequencerType == 'illumina':
         if args_parsed.readmapper == "minimap2":
-            args_parsed.addOptions = "-A1 -B2 -k %s -m %s -x sr -p 1 -N 30"%(args_parsed.alignSeedLength, args_parsed.alignMinScore)
+            args_parsed.addOptions = "-A1 -B2 -k %s -m %s -x sr -p 1 -N 30 --secondary=yes"%(args_parsed.alignSeedLength, args_parsed.alignMinScore)
             args_parsed.minRsnb = 1
             args_parsed.minReads = 3
             args_parsed.minLen = 50
@@ -1949,7 +1950,7 @@ def mergingSAM( in_sam_files, out_sam_file, min_score=0, host_tag="H", nm_range=
 
     return (tol_host, tol_rootspec, tol_mapped)
 
-def readMapping(reads, dbs, threads, add_options, seed_length, min_score, samfile, logfile, readmapper,illuminaminimap2):
+def readMapping(reads, dbs, threads, add_options, seed_length, min_score, samfile, logfile, readmapper):
     """
     Mapping reads to reference index(es)
     """
@@ -1979,11 +1980,7 @@ def readMapping(reads, dbs, threads, add_options, seed_length, min_score, samfil
         filter_cmd = "gawk -F\\\\t '!and($2,4) { print }'"
         
         if readmapper == "minimap2":
-            if illuminaminimap2: 
-                mapper_cmd = f"minimap2 -aL --secondary=yes -t {threads} {add_options} {db} {input_file}"
-                #print("Illumina Minimap2 alignerused:", illuminaminimap2)
-                #filter_cmd = "gawk -F\\\\t ' { print }'"
-            else: mapper_cmd = f"minimap2 -aL -t {threads} {add_options} {db} {input_file}"
+            mapper_cmd = f"minimap2 -aL -t {threads} {add_options} {db} {input_file}"
         else:
             mapper_cmd = f"bwa mem -k{seed_length} -T{min_score} {add_options} -t{threads} {db} {input_file}"
 
@@ -2359,7 +2356,7 @@ if __name__ == '__main__':
     # if reads provided
     if argvs.input:
         print_message( "Running read-mapping...", argvs.silent, begin_t, logfile )
-        (tol_host, tol_rootspec, tol_mapped, tol_reads) = readMapping( argvs.input, argvs.database, argvs.threads, argvs.addOptions, argvs.alignSeedLength, argvs.alignMinScore, samfile, logfile, argvs.readmapper,argvs.illumina)
+        (tol_host, tol_rootspec, tol_mapped, tol_reads) = readMapping( argvs.input, argvs.database, argvs.threads, argvs.addOptions, argvs.alignSeedLength, argvs.alignMinScore, samfile, logfile, argvs.readmapper)
         print_message( "Logfile saved to %s." % logfile, argvs.silent, begin_t, logfile )
         print_message( "Done. Mapped SAM file saved to %s." % samfile, argvs.silent, begin_t, logfile )
         print_message( "Total number of input reads: %s"%tol_reads, argvs.silent, begin_t, logfile )
