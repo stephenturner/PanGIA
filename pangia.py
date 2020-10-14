@@ -1,7 +1,6 @@
-#!/home/edge/edge_dev/thirdParty/Anaconda3/bin/python3
-__author__    = "Po-E (Paul) Li, Bioscience Division, Los Alamos National Laboratory"
-__version__   = "1.0.0-RC6.1"
-__date__      = "2018/12/10"
+__author__    = "David Yarmosh, MRIGlobal Bioinformatics"
+__version__   = "1.1.0"
+__date__      = "2020/10/14"
 __copyright__ = "BSD-3"
 
 import argparse as ap
