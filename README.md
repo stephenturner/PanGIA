@@ -54,37 +54,58 @@ https://edge-dl.lanl.gov/PanGIA/database/
 ## QUICK INSTALLATION
 
 0. Make sure you have requirements and dependencies installed properly. [Conda](https://conda.io/miniconda.html) is quick way.
+```sh
+conda create -n pangia2 -y -c conda-forge -c bioconda python bwa minimap2 samtools pandas scipy bokeh
+```
 
 1. Retrieving PanGIA:
-```
+```sh
 git clone https://github.com/poeli/pangia.git && cd pangia
 ```
 
 2. Download databases:
-```
-curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20180915_taxonomy.tar.gz
-curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20180915_NCBI_genomes_refseq89_BAV.fa.tar
-curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20180915_NCBI_genomes_refseq89_adds.fa.tar
+```sh
+curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20190830_taxonomy.tar.gz
+curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20190830_NCBI_genomes_refseq89_BAV.fa.mmi.tar.gz
+curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20190830_NCBI_genomes_refseq89_adds.fa.tar
 curl -O https://edge-dl.lanl.gov/PanGIA/database/PanGIA_20180915_NCBI_genomes_refseq89_Human_GRCh38.p12.fa.tar
 ```
 
 3. Decompress databases. All files will be decompressed to "pangia/database" directory.
+```sh
+tar -xzf PanGIA_20190830_taxonomy.tar.gz
+tar -xzf PanGIA_20190830_NCBI_genomes_refseq89_BAV.fa.mmi.tar.gz
+tar -xf PanGIA_20190830_NCBI_genomes_refseq89_adds.fa.tar
+tar -xf PanGIA_20180915_NCBI_genomes_refseq89_Human_GRCh38.p12.fa.tar
 ```
-tar -xzf PanGIA_20180915_taxonomy.tar.gz
-tar -xzf PanGIA_20180915_NCBI_genomes_refseq89_BAV.fa.tar
-tar -xzf PanGIA_20180915_NCBI_genomes_refseq89_adds.fa.tar
-tar -xzf PanGIA_20180915_NCBI_genomes_refseq89_Human_GRCh38.p12.fa.tar
-```
+
 4. Enjoy.
 
 -------------------------------------------------------------------
+
 ## EXAMPLE USAGE
+
+### Quick start
+
+Get the Human Microbiome Project even mock community data:
+
+```sh
+wget ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR172/SRR172902/SRR172902.fastq.gz
+gunzip SRR172902.fastq.gz
 ```
+
+Run PanGIA:
+
+```sh
 ./pangia.py \
-  -i test.1.fastq test.2.fastq\
-  -db database/NCBI_genomes_refseq89_*.fa  \
+  -i SRR172902.fastq \
+  -db PanGIA/NCBI_genomes_refseq89_*.fa  \
   -t 24
 ```
+
+### Going further
+
+Download and extract additional databases at <https://edge-dl.lanl.gov/PanGIA/database/>.
 
 Run dataset HMP Mock Community even sample (SRR172902) against PanGIA NCBI refseq89 BAV and adds database with 24 threads, save mapping information to JSON file for use as a background later.
 
