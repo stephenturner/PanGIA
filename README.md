@@ -55,7 +55,8 @@ https://edge-dl.lanl.gov/PanGIA/database/
 
 0. Make sure you have requirements and dependencies installed properly. [Conda](https://conda.io/miniconda.html) is quick way.
 ```sh
-conda create -n pangia2 -y -c conda-forge -c bioconda python bwa minimap2 samtools pandas scipy bokeh
+conda create -n pangia -y -c conda-forge -c bioconda python bwa minimap2 samtools pandas scipy bokeh
+conda activate pangia
 ```
 
 1. Retrieving PanGIA:
@@ -97,6 +98,7 @@ gunzip SRR172902.fastq.gz
 Run PanGIA:
 
 ```sh
+conda activate pangia
 ./pangia.py \
   -i SRR172902.fastq \
   -db PanGIA/NCBI_genomes_refseq89_*.fa  \
